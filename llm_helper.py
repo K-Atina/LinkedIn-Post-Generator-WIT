@@ -1,15 +1,17 @@
-from langchain_groq import ChatGroq
+from openai import OpenAI
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
-llm = ChatGroq(groq_api_key=os.getenv("GROQ_API_KEY"), model_name="llama-3.2-90b-text-preview")
+from few_shot import FewShotPosts
 
 
-if __name__ == "__main__":
-    response = llm.invoke("Two most important ingradient in samosa are ")
-    print(response.content)
+client = OpenAI(
+    api_key= os.environ.get("groq_api_key"),
+    base_url="https://api.groq.com/openai/v1",
+)
 
-
+response = client.responses.create(
+    input= FewShotPosts,
+    model="openai/gpt-oss-20b",
+)
+print(response.output_text)
 
 
